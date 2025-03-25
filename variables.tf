@@ -14,3 +14,7 @@ variable "public_subnet_az" {
     type = string
 }
 
+variable "instance_type" {
+   type = string
+}
+
