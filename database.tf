@@ -13,7 +13,7 @@ resource "aws_secretsmanager_secret_version"  "${var.env}_rds_secret_version" {
 resource "random_password" "${var.env}_rds_password_random" {
   length = 15
 }
-
+#RDS Instance
 resource "aws_db_instance" "${var.env}_rds_instance" {
   allocated_storage    = 10
   db_name              = "devdb"
@@ -26,7 +26,7 @@ resource "aws_db_instance" "${var.env}_rds_instance" {
   parameter_group_name = "default.mysql8.0"
   skip_final_snapshot  = true
 }
-
+#RDS Subnet Group
 resource "aws_db_subnet_group" "${var.env}_subnet_group"{
   name = "${var.env}_subnet_group"
   subnet_ids = [publicsubnet2_id, publicsubnet1_id]
