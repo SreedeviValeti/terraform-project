@@ -84,8 +84,6 @@ resource "aws_vpc_security_group_egress_rule" "egress_allow_tcp_http" {
 }
 
 data aws_ami "webserver_ami" {
-  owners = ["amazon"]
-  most_recent = true
   filter {
     name = "image-id"
     values = ["ami-04f167a56786e4b09"]
@@ -110,7 +108,13 @@ sudo systemctl enable apache2
 echo "This apache server is deployed by terraform" >/var/www/html/index.html
 EOF
 
+}
 
-
+resource aws_s3_bucket "webserver_bucket" {
+   bucket = "webserver-logs-bucket"
+   tags = {
+    name = "webserver-logs-bucket"
+   }
+   depends_on = [aws_instance.public_webserver.id]
 }
 
