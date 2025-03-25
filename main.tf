@@ -71,7 +71,7 @@ resource "aws_vpc_security_group_ingress_rule" "ingress_allow_tcp_http" {
   ip_protocol       = "tcp"
   from_port         = 80
   to_port           = 80
-  cidr_ipv4         = "172.30.0.0/24"
+  cidr_ipv4         = "0.0.0.0/0"
 }
 
 # VPC Security group Egress Rule
@@ -87,6 +87,7 @@ data aws_ami "webserver_ami" {
   filter {
     name = "image-id"
     values = ["ami-04f167a56786e4b09"]
+}
 }
 resource aws_instance "public_webserver" {
   ami = data.aws_ami.webserver_ami.id
@@ -112,9 +113,10 @@ EOF
 
 resource aws_s3_bucket "webserver_bucket" {
    bucket = "webserver-logs-bucket"
+
    tags = {
     name = "webserver-logs-bucket"
    }
-   depends_on = [aws_instance.public_webserver.id]
+   depends_on = [aws_instance.public_webserver]
 }
 
