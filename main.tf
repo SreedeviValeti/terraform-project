@@ -28,13 +28,22 @@ resource "aws_internet_gateway" "internet-gateway" {
   }
 }
 
-# Subnet
-resource "aws_subnet" "public_subnet" {
-  cidr_block        = var.public_subnet_cidr
-  availability_zone = var.public_subnet_az
+# Subnet 1
+resource "aws_subnet" "public_subnet1" {
+  cidr_block        = var.public_subnet_cidr[1]
+  availability_zone = var.public_subnet_az[1]
   vpc_id            = aws_vpc.vpc.id
   tags = {
-    Name = "${var.env}-public_subnet"
+    Name = "${var.env}-public_subnet1"
+  }
+}
+
+resource "aws_subnet" "public_subnet2" {
+  cidr_block        = var.public_subnet_cidr[0]
+  availability_zone = var.public_subnet_az[0]
+  vpc_id            = aws_vpc.vpc.id
+  tags = {
+    Name = "${var.env}-public_subnet2"
   }
 }
 
@@ -89,6 +98,8 @@ data aws_ami "webserver_ami" {
     values = ["ami-04f167a56786e4b09"]
 }
 }
+
+#Public Webserver
 resource aws_instance "public_webserver" {
   ami = data.aws_ami.webserver_ami.id
   associate_public_ip_address = true
@@ -110,7 +121,7 @@ echo "This apache server is in ${var.env} deployed by terraform" >/var/www/html/
 EOF
 
 }
-
+#S3 Bucket
 resource aws_s3_bucket "webserver_bucket" {
    bucket = "${var.env}-webserver-logs-bucket"
 
