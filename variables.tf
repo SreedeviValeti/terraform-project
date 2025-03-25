@@ -18,5 +18,5 @@ variable "instance_type" {
    type = string
 }
 
-var "env" {}
+variable "env" {}
 
