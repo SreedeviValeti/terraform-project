@@ -60,8 +60,13 @@ resource "aws_route_table" "public_route_table" {
 }
 
 #Route Table Association
-resource "aws_route_table_association" "public-rt-association" {
-  subnet_id      = aws_subnet.public_subnet.id
+resource "aws_route_table_association" "public-rt-association1" {
+  subnet_id      = aws_subnet.public_subnet1.id
+  route_table_id = aws_route_table.public_route_table.id
+}
+
+resource "aws_route_table_association" "public-rt-association2" {
+  subnet_id      = aws_subnet.public_subnet2.id
   route_table_id = aws_route_table.public_route_table.id
 }
 
@@ -106,7 +111,7 @@ resource aws_instance "public_webserver" {
   instance_type = var.instance_type 
   key_name = "ohio"
   security_groups = ["${aws_security_group.vpc_sg.id}"]
-  subnet_id = aws_subnet.public_subnet.id
+  subnet_id = aws_subnet.public_subnet1.id
   tags = {
     Name = "${var.env}-webserver"
   }
