@@ -108,7 +108,7 @@ resource aws_instance "public_webserver" {
   ami = data.aws_ami.webserver_ami.id
   associate_public_ip_address = true
   instance_type = var.instance_type 
-  keyname = "ohio"
+  key_name = "ohio"
   security_groups = ["${aws_security_group.vpc_sg.id}"]
   subnet_id = aws_subnet.public_subnet.id
   tags = {
