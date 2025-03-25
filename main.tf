@@ -34,7 +34,7 @@ resource "aws_subnet" "public_subnet" {
   availability_zone = var.public_subnet_az
   vpc_id            = aws_vpc.vpc.id
   tags = {
-    Name = "public_subnet"
+    Name = "${var.env}-public_subnet"
   }
 }
 
@@ -46,7 +46,7 @@ resource "aws_route_table" "public_route_table" {
   }
   vpc_id = aws_vpc.vpc.id
   tags = {
-    Name = "public_route_table"
+    Name = "${var.env}-public_route_table"
   }
 }
 
@@ -58,7 +58,7 @@ resource "aws_route_table_association" "public-rt-association" {
 
 # VPC Security group
 resource "aws_security_group" "vpc_sg" {
-  name   = "vpc_sg"
+  name   = "${var.env}-vpc_sg"
   vpc_id = aws_vpc.vpc.id
   tags = {
     Name = "vpc-sg"
@@ -97,7 +97,7 @@ resource aws_instance "public_webserver" {
   security_groups = ["${aws_security_group.vpc_sg.id}"]
   subnet_id = aws_subnet.public_subnet.id
   tags = {
-    Name = "webserver"
+    Name = "${var.env}-webserver"
   }
   user_data = <<EOF
 #!/bin/bash
@@ -106,16 +106,16 @@ sudo apt-get update -y
 sudo apt-get install apache2 -y 
 sudo systemctl start apache2
 sudo systemctl enable apache2
-echo "This apache server is deployed by terraform" >/var/www/html/index.html
+echo "This apache server is in ${var.env} deployed by terraform" >/var/www/html/index.html
 EOF
 
 }
 
 resource aws_s3_bucket "webserver_bucket" {
-   bucket = "webserver-logs-bucket"
+   bucket = "${var.env}-webserver-logs-bucket"
 
    tags = {
-    name = "webserver-logs-bucket"
+    name = "${var.env}-webserver-logs-bucket"
    }
    depends_on = [aws_instance.public_webserver]
 }
