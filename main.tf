@@ -86,23 +86,9 @@ resource "aws_vpc_security_group_egress_rule" "egress_allow_tcp_http" {
 data aws_ami "webserver_ami" {
   owners = ["amazon"]
   most_recent = true
-  name_regex = "^ami"
-  filter {
-    name = "description"
-    values = ["Ubuntu Server 24.04 LTS (HVM),EBS General Purpose (SSD) Volume Type. Support available from Canonical (http://www.ubuntu.com/cloud/services)."]
-  }
   filter {
     name = "image-id"
-    values = ["ami-*"]
-  }
-  filter{
-    name = "platform"
-    values = ["ubuntu"]
-  }
-  filter{
-    name = "virtualization-type"
-    values = ["hvm"]
-  }
+    values = ["ami-04f167a56786e4b09"]
 }
 resource aws_instance "public_webserver" {
   ami = data.aws_ami.webserver_ami.id
