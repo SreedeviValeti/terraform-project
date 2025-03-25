@@ -1,10 +1,12 @@
 #Secret For RDS Database Instance 
 resource "aws_secretsmanager_secret" "${var.env}_rds_secret" {
+  depends_on = ${var.env}_rds_password_random
   name = "${var.env}-rds-secret"
 }
 
 #Secret Value and Secret Association"
 resource "aws_secretsmanager_secret_version"  "${var.env}_rds_secret_version" {
+depends_on = ${var.env}_rds_secret
   secret_id = aws_secretsmanager_secret.${var.env}_rds_secret.id
   secret_string = random_password.${var.env}_rds_password_random.result
 }
@@ -15,6 +17,7 @@ resource "random_password" "${var.env}_rds_password_random" {
 }
 #RDS Instance
 resource "aws_db_instance" "${var.env}_rds_instance" {
+ depends_on = ${var.env}_rds_secret_version
   allocated_storage    = 10
   db_name              = "devdb"
   engine               = "mysql"
