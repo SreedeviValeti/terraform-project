@@ -21,7 +21,7 @@ resource "aws_db_instance" "${var.env}_rds_instance" {
   engine_version       = "8.0"
   instance_class       = "db.t3.micro"
   username             = "devdb_admin"
-  password             = aws_secretsmanager_secret_version.${var.env}_rds_secret_version.arn
+  password             = random_password.${var.env}_rds_password_random.result
   parameter_group_name = "default.mysql8.0"
   skip_final_snapshot  = true
 }
