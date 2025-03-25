@@ -29,7 +29,7 @@ resource "aws_db_instance" "${var.env}_rds_instance" {
 
 resource "aws_db_subnet_group" "${var.env}_subnet_group"{
   name = "${var.env}_subnet_group"
-  subnet_ids = []
+  subnet_ids = [aws]
   tags = {
     name = ${var.env}_subnet_group
   }
