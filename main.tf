@@ -115,14 +115,14 @@ resource aws_instance "public_webserver" {
     Name = "webserver"
   }
   user_data = << EOF
-                 #!/bin/bash
-                 sudo su -
-                 sudo apt-get update -y
-                 sudo apt-get install apache2 -y 
-                 sudo systemctl start apache2
-                 sudo systemctl enable apache2
-                 echo "This nginx server is deployed by terraform" >/var/www/html/index.html
-              EOF
+#!/bin/bash
+sudo su -
+sudo apt-get update -y
+sudo apt-get install apache2 -y 
+sudo systemctl start apache2
+sudo systemctl enable apache2
+echo "This nginx server is deployed by terraform" >/var/www/html/index.html
+EOF
 
 
 
