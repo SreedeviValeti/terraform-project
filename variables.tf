@@ -29,3 +29,5 @@ variable "instance_type" {
    }
 }
 
+var "env" {}
+
