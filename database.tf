@@ -33,7 +33,7 @@ resource "aws_db_instance" "rds_instance" {
 #RDS Subnet Group
 resource "aws_db_subnet_group" "subnet_group"{
   name = "subnet_group"
-  subnet_ids = [public_subnet[*].id]
+  subnet_ids = [aws_subnet_group.public_subnet[*].id]
   tags = {
     name = ${var.env}-subnet_group
   }
