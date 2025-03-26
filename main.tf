@@ -69,7 +69,7 @@ resource "aws_security_group" "web_sg" {
 
 #VPC Security group ingress rule
 resource "aws_security_group_rule" "web_sg_ingress" {
- for_each = {for idx, rule in web_sg_ingress_rules : idx => rule}
+ for_each = {for idx, rule in web_sg_ingress_rule : idx => rule}
   type              = "ingress"
   from_port         = each.value.from_port
   to_port           = each.value.to_port
