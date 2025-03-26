@@ -1,4 +1,5 @@
 resource "null_resource" "null_resource" {
+count = length(var.public_subnet_cidr)
  connection {
  type = "ssh"
  user = "ec2-user"
