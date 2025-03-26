@@ -22,7 +22,6 @@ variable "env" {}
 
 variable "keyname" {}
 
-variable "web_sg_ingress" {}
 
 variable "web_sg_ingress_rule" {}
 
