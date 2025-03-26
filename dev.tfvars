@@ -5,7 +5,7 @@ public_subnet_az = ["us-east-2a","us-east-2b"]
 instance_type = "t2.nano"
 env = "dev"
 keyname = "ohio"
-web_sg_ingress = [
+web_sg_ingress_rule = [
 {
   from_port         = 80
   to_port           = 80
