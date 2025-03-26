@@ -59,14 +59,33 @@ resource "aws_route_table_association" "public-rt-association" {
 }
 
 # VPC Security group
-resource "aws_security_group" "vpc_sg" {
-  name   = "${var.env}-web-vpc_sg"
-  ingress = [var.web_sg_ingress]
-  egress  = [var.web_sg_egress]
+resource "aws_security_group" "web_sg" {
+  name   = "${var.env}-web-_sg"
   vpc_id = aws_vpc.vpc.id
   tags = {
-    Name = "${var.env}-web-vpc_sg"
+    Name = "${var.env}-web-_sg"
   }
+}
+
+#VPC Security group ingress rule
+resource "aws_security_group_rule" "web_sg_ingress" {
+ for_each = {for idx, rule in web_sg_ingress_rules : idx => rule}
+  type              = "ingress"
+  from_port         = each.value.from_port
+  to_port           = each.value.to_port
+  protocol          = each.value.protocol
+  cidr_blocks       = each.value.cidr_blocks
+  security_group_id = "aws_security_group.web_sg.id"
+}
+
+#VPC Security group egress rule
+resource "aws_security_group_rule" "web_sg_egress" {
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = "aws_security_group.web_sg.id"
 }
 
 
