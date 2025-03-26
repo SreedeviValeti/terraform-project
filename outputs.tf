@@ -9,10 +9,6 @@ output "ig_id" {
 output "security_group_id" {
     value = aws_security_group.vpc_sg.id
 }
-output "publicsubnet1_id" {
-  value = aws_subnet_group.public_subnet1.id
-}
-
-output "publicsubnet2_id" {
-  value = aws_subnet_group.public_subnet2.id
+output "publicsubnet_id" {
+  value = aws_subnet_group.public_subnet[*].id
 }
