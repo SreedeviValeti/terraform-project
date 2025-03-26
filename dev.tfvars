@@ -17,5 +17,11 @@ web_sg_ingress_rule = [
   to_port           = 443
   protocol          = "tcp"
   cidr_blocks       = ["0.0.0.0/0" ]
+},
+{
+  from_port         = 8443
+  to_port           = 8443
+  protocol          = "tcp"
+  cidr_blocks       = ["172.30.0.0/16" ]
 }
 ]
