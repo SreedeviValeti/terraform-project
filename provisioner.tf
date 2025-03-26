@@ -2,7 +2,7 @@ resource "null_resource" "null_resource" {
  connection {
  type = "ssh"
  user = "ec2-user"
- privatekey = file("erpa-practice-key.pem")
+ privatekey = file("erpa-practice-key.pem") 
  host = element(aws_instance.public_instance.[*].public_ip, count.index)
  }
  provisioner "file" {
