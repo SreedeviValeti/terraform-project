@@ -30,12 +30,23 @@ resource "aws_internet_gateway" "internet-gateway" {
 
 # Public Subnet 
 resource "aws_subnet" "public_subnet" {
-  count = length(var.public_subnet_cidr)
+count = 1
   cidr_block        = element(var.public_subnet_cidr, count.index + 1)
   availability_zone = element(var.public_subnet_az, count.index + 1)
   vpc_id            = aws_vpc.vpc.id
   tags = {
     Name = "${var.env}-public_subnet-${count.index + 1}"
+  }
+}
+
+# Private Subnet 
+resource "aws_subnet" "private_subnet" {
+  count = length(var.private_subnet_cidr)
+  cidr_block        = element(var.private_cidr, count.index + 1)
+  availability_zone = element(var.private_az, count.index + 1)
+  vpc_id            = aws_vpc.vpc.id
+  tags = {
+    Name = "${var.env}-private_subnet-${count.index + 1}"
   }
 }
 
@@ -50,12 +61,43 @@ resource "aws_route_table" "public_route_table" {
     Name = "${var.env}-public_route_table"
   }
 }
+# Private Route Table
+resource "aws_route_table" "private_route_table" {
+  route {
+    cidr_block = var.vpc_cidr
+    gateway_id = aws_nat_gateway.nat_gateway.id
+  }
+  vpc_id = aws_vpc.vpc.id
+  tags = {
+    Name = "${var.env}-private_route_table"
+  }
+}
 
+#Nat Gateway
+resource "aws_nat_gateway" "nat_gateway" {
+allocation_id = aws_eip.eip.id
+subnet_id = aws_subnet.public_subnet.[0]
+tags = {
+name = "vpc-nat-gateway"
+}
+
+#EIP
+resource "aws_eip" "eip" {
+domain       = "vpc"
+}
+
+}
 #Route Table Association
 resource "aws_route_table_association" "public-rt-association" {
   count = length(var.public_subnet_cidr)
   subnet_id      = element(aws_subnet.public_subnet[*].id, count.index)
   route_table_id = element(aws_route_table.public_route_table[*].id, count.index)
+}
+#Private Route Table Association
+resource "aws_route_table_association" "private-rt-association" {
+  count = length(var.private_subnet_cidr)
+  subnet_id      = element(aws_subnet.private_subnet[*].id, count.index)
+  route_table_id = element(aws_route_table.private_route_table[*].id, count.index)
 }
 
 # VPC Security group
