@@ -6,8 +6,9 @@
 }
 
 #Public Webserver
-count = length(
+
 resource aws_instance "public_webserver" {
+  count = var.env == "dev" ? 1 :0
   ami = data.aws_ami.webserver_ami.id
   associate_public_ip_address = true
   instance_type = var.instance_type 
