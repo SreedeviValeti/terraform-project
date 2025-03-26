@@ -1,5 +1,5 @@
 #Secret For RDS Database Instance 
-resource "aws_secretsmanager_secret" "rds_secret" {
+/*resource "aws_secretsmanager_secret" "rds_secret" {
   depends_on = [random_password.rds_password_random]
   name = "${var.env}-rds-secret"
 }
@@ -37,4 +37,4 @@ resource "aws_db_subnet_group" "subnet_group"{
   tags = {
     name = ${var.env}-subnet_group
   }
-}
+}*/
