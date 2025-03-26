@@ -28,46 +28,35 @@ resource "aws_internet_gateway" "internet-gateway" {
   }
 }
 
-# Subnet 1
-resource "aws_subnet" "public_subnet1" {
-  cidr_block        = var.public_subnet_cidr[1]
-  availability_zone = var.public_subnet_az[1]
+# Public Subnet 
+resource "aws_subnet" "public_subnet" {
+  count =2
+  cidr_block        = element(var.public_subnet_cidr, count.index)
+  availability_zone = element(var.public_subnet_az, count.index)
   vpc_id            = aws_vpc.vpc.id
   tags = {
-    Name = "${var.env}-public_subnet1"
+    Name = "${var.env}-public_subnet-${count.index}"
   }
 }
 
-resource "aws_subnet" "public_subnet2" {
-  cidr_block        = var.public_subnet_cidr[0]
-  availability_zone = var.public_subnet_az[0]
-  vpc_id            = aws_vpc.vpc.id
-  tags = {
-    Name = "${var.env}-public_subnet2"
-  }
-}
-
-#Route Table
+# Public Route Table
 resource "aws_route_table" "public_route_table" {
+  count =2 
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.internet-gateway.id
   }
   vpc_id = aws_vpc.vpc.id
   tags = {
-    Name = "${var.env}-public_route_table"
+    Name = "${var.env}-public_route_table-${count.index}"
   }
 }
 
 #Route Table Association
-resource "aws_route_table_association" "public-rt-association1" {
-  subnet_id      = aws_subnet.public_subnet1.id
-  route_table_id = aws_route_table.public_route_table.id
-}
-
-resource "aws_route_table_association" "public-rt-association2" {
-  subnet_id      = aws_subnet.public_subnet2.id
-  route_table_id = aws_route_table.public_route_table.id
+resource "aws_route_table_association" "public-rt-association" {
+  count = 2
+  subnet_id      = element(aws_subnet.public_subnet[*].id, count.index)
+  route_table_id = element(aws_route_table.public_route_table[*].id, count.index)
 }
 
 # VPC Security group
