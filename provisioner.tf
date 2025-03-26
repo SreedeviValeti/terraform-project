@@ -3,7 +3,7 @@ resource "null_resource" "null_resource" {
  type = "ssh"
  user = "ec2-user"
  privatekey = file("erpa-practice-key.pem")
- host = aws_instance.public_instance.[*].public_ip
+ host = element(aws_instance.public_instance.[*].public_ip, count.index)
  }
  provisioner "file" {
  source = "userdata.sh"
