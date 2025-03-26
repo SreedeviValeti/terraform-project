@@ -6,6 +6,7 @@
 }
 
 #Public Webserver
+count = length(
 resource aws_instance "public_webserver" {
   ami = data.aws_ami.webserver_ami.id
   associate_public_ip_address = true
