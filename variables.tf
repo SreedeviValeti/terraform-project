@@ -7,11 +7,9 @@ variable "vpc_cidr" {
 }
 
 variable "public_subnet_cidr" {
-    type = string
 }
 
 variable "public_subnet_az" {
-    type = string
 }
 
 variable "instance_type" {
